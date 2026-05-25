@@ -9,7 +9,7 @@ The core source code and training pipelines for this project are currently hoste
 
 ## Overview
 
-This repository contains the codes and scripts utilized in this project of cross-domain mammography cancer diagnosis, done as
+The actual project repository contains the codes and scripts utilized in this project of cross-domain mammography cancer diagnosis, done as
 part of a Research Assistantship at SciWhyLab, School of Computational & Integrative Sciences,
 Jawaharlal Nehru University, New Delhi, under the supervision of **Prof. Shandar Ahmad**.
 
@@ -27,7 +27,7 @@ The pipeline was evaluated on **seven datasets** spanning:
 
 ---
 
-## Pipeline Structure
+## Main Repository Structure
 
 ```
 cross-domain-mammography-DANN/
