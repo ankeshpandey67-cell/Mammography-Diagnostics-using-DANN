@@ -119,7 +119,7 @@ Using pip:
 pip install -r required_packages.txt
 ```
 
-All of this work was done on a Linux server running on a x86_64 AMD 48 core processor and a NVIDIA GPU with 24 GB VRAM, having CUDA version 11.5.
+All of this work was done on a Linux server running on two AMD 48 core processors (192 threads) and a NVIDIA GPU with 24 GB VRAM, having CUDA version 11.5.
 The total number of images used in this study was 19,557 (38 GB). 
 
 ---
