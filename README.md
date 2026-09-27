@@ -7,7 +7,7 @@
 
 ## Overview
 
-This is a public repository containing the same README.md as the main repository containing the codes and scripts utilized in the "Cross-cohort mammography generalization" project done as
+This is a public repository containing the same README.md as the main repository (private till publication) containing the codes and scripts utilized in the "Cross-cohort mammography generalization" project done as
 part of a Research Assistantship at **SciWhyLab, School of Computational & Integrative Sciences,
 Jawaharlal Nehru University, New Delhi**.
 
