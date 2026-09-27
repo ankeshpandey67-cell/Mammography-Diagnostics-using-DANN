@@ -1,17 +1,15 @@
-# Cross-Domain Mammography Cancer Diagnosis using Domain Adversarial Neural Networks
+# Cross-Domain Mammography Generalization for Breast Cancer Diagnosis using Domain Adversarial Neural Networks
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-orange)
 ![Status](https://img.shields.io/badge/Status-Manuscript%20In%20Preparation-yellow)
 
-## Note
-The core source code and training pipelines for this project are currently hosted in a private repository for security/institutional compliance. This repository serves as the public documentation and research summary.
 
 ## Overview
 
-The actual project repository contains the codes and scripts utilized in this project of cross-domain mammography cancer diagnosis, done as
-part of a Research Assistantship at SciWhyLab, School of Computational & Integrative Sciences,
-Jawaharlal Nehru University, New Delhi, under the supervision of **Prof. Shandar Ahmad**.
+This repository contains the codes and scripts utilized in this project developed as
+part of a Research Assistantship at **SciWhyLab, School of Computational & Integrative Sciences,
+Jawaharlal Nehru University, New Delhi**.
 
 The central challenge addressed is **batch effects** arising from mammographic datasets of different geographical
 and institutional origins. We develop and evaluate an ensemble framework of **Domain Adversarial Neural Networks (DANNs)**
@@ -22,15 +20,15 @@ to achieve robust cross-domain generalisation across diverse patient populations
 ## Datasets
 
 The pipeline was evaluated on **seven datasets** spanning:
-- **Populations:** Asian (CMMD, VinDR mammo), South Asian (IBIA), European (MIAS and INbreast), and American (CBIS-DDSM and RSNA)
+- **Populations:** Asian (CMMD, VinDR mammo), South Asian (IBIA), European (MIAS and INbreast), Australian (RSNA) and American (CBIS-DDSM and RSNA)
 - **Modalities:** Legacy (Scanned) Film Mammography and Full-Field Digital Mammography (FFDM)
 
 ---
 
-## Main Repository Structure
 
+## Repository Structure
 ```
-cross-domain-mammography-DANN/
+cross-domain-mammography-DANN/ 
 │
 ├── 1_preprocessing/
 │   ├── Data_harmonization.py            # Set a standard filename for all the datasets
@@ -48,21 +46,16 @@ cross-domain-mammography-DANN/
 │
 ├── 3_classification/
 │   ├── DANN/
-│   │   ├── EfficientNet-SingleSource-DANN-training.py  # Running this script will train the DANN model on the EfficientNetB0 features 
-│   │   ├── EfficientNet-SingleSource-DANN-ensemble.py  # Run this script to generate inference on test data by creating an ensemble of EfficientNet models generated in the previous step.
-│   │   ├── Medsiglip-SingleSource-DANN-training.py     # Running this script will train the DANN model on the Google/MedSigLip-448 features
-│   │   ├── Medsiglip-SingleSource-DANN-ensemble.py     # Run this script to generate inference on test data by creating an ensemble of Google/MedSigLip-448 models generated in the previous step.
-│   │   ├── Radiomics-SingleSource-DANN-training.py     # Running this script will train the DANN model on the Quantitative features extracted with the PyRadiomics package 
-│   │   └── Radiomics-SingleSource-DANN-ensemble.py     # Run this script to generate inference on test data by creating an ensemble of Radiomics models generated in the previous step.
-│   ├── ML_classifier/
-│   │   ├── EfficientNet-ML-classifier.py               # Run this script to classify the EfficientNetB0 features using XGB and RF
-│   │   ├── Medsiglip-ML-classifier.py                  # Run this script to classify the Google/MedSigLip-448 features using XGB and RF
-│   │   └── Radiomics-ML-classifier.py                  # Run this script to classify the Radiomics features using XGB and RF
-│   │ 
+│   │   ├── DANN_All_vs_All_evaluation.py       # Running this script will train the DANN model on the features and do an All-vs-all (cross-domain) evaluation of tranfer learning on all the datasets.
+│   │   ├── DANN_InDomain_CV_5folds.py          # Running this script will train the DANN model on the features and do the in-domain evaluation on the datasets.
+│   │   └── DANN_LODO_CV_evaluation.py          # Running this script will train the DANN model on the features in a Leave-One-Dataset-Out ensemble fashion and evaluate the ensemble models on the test dataset held out in each fold.
+│   │
+│   ├── DDS_Score_calculation/
+│   │   └── 9-exp_a_dataset_discriminability.py # This script is meant for calculating the "Dataset Discriminability Score (DDS)" before training the classifiers to quantify the domain shifts inherent in the datasets.
+│   │
 │   └── Simple_MLP_classifier/
-│       ├── EfficientNet-feature-classifier-Simple-MLP.py       # Run this script to classify the EfficientNetB0 features using a custom 4 layer MLP
-│       ├── Medsiglip-features-classifier-Simple-MLP.py         # Run this script to classify the Google/MedSigLip-448 features using a custom 4 layer MLP
-│       └── Radiomics-features-classifier-Simple-MLP.py         # Run this script to classify the Radiomics features using a custom 4 layer MLP
+│       ├── MLP_All_vs_All_evaluation.py        # Running this script will train the MLP model on the features and do an All-vs-all evaluation of tranfer learning on all the datasets.
+│       └── MLP_LODO_CV_evaluation.py           # Running this script will train the MLP model on the features in a Leave-One-Dataset-Out ensemble fashion and evaluate the ensemble models on the test dataset held out in each fold.
 │
 ├── mammo_env.yml                 # Conda environment file
 ├── required_packages.txt         # pip requirements
@@ -82,25 +75,24 @@ Three cohorts were created from each dataset:
 ### 2. Feature Extraction
 Three feature types were extracted from each preprocessing cohort:
 - **EfficientNet features:** Deep CNN representations
-- **Google/MedSigLIP-448 features:** Medical vision-language model embeddings
+- **MedSigLIP-448 features:** Medical vision-language model embeddings
 - **Quantitative features:** Handcrafted radiomic-style features
 
 ### 3. Classification
-Three classification approaches were evaluated:
-- Classical ML  (Random Forest, XGBoost)
-- Simple MLP    (4 Layer MLP)
-- **Domain Adversarial Neural Networks (DANNs)** - one training and one classification script per feature type
+Two classification approaches in two different evaluation settings were evaluated: 
+- Simple 4 Layer MLP - All vs all and LODO ensemble evaluation
+- Domain Adversarial Neural Network (DANN) - All vs all and LODO ensemble evaluation
 
-### Primary Metric
-**AUC-ROC** was used as the primary performance metric across all experiments.
+### 4. Primary Metric and Statistical Analysis
+**AUC-ROC** reported with bootstrapped 95% C.I. was used as the primary performance metric across all experiments.
+
+Parametric and non-parametric tests were done to evaluate the statistical significance of the results obtained. Linear Mixed Effects (LME) modeling was done to test the effect of each successive step of preprocessing, featurization, training and evaluation choice with respect to a carefully chosen baseline for all three of these.
 
 ---
 
 ## Key Results
-- Domain Adversarial Neural Network consistently outperformed classical ML (XGB and RF) and simple MLP baselines in cross-domain settings.
-- Google/MedSigLIP-448 features yielded strongest domain-invariant representations for digitally acquired images.
-- Quantitative features yielded best features for domain-invariant representions for legacy (scanned) images.
-- CNN based features completely failed in providing any generalizability across any of the 7 datasets or any of the 3 classifier models.
+- Domain Adversarial Neural Network consistently outperformed simple MLP baselines in cross-domain settings. Consistent with the prior literature, LODO training was superior to single-source, multi-target (all vs all) setup.
+- However, counter intuitively, the domain generalization task was found to be representation dependent and preprocessing invariant.
 
 ---
 
@@ -119,8 +111,8 @@ Using pip:
 pip install -r required_packages.txt
 ```
 
-All of this work was done on a Linux server running on two AMD 48 core processors (192 threads) and a NVIDIA GPU with 24 GB VRAM, having CUDA version 11.5.
-The total number of images used in this study was 19,557 (38 GB). 
+## Hardware details
+All of this work was done on a Linux server running on a pair of x86_64 48 core processors (AMD) (192 threads) and a NVIDIA GPU with 24 GB VRAM, having CUDA version 11.5.
 
 ---
 
@@ -131,11 +123,11 @@ Manuscript in preparation. Repository and the quantitative results will be kept 
 
 ## Authors
 **Ankesh Kumar Pandey**
-Research Assistant, SciWhyLab, SC&IS, JNU, New Delhi
+Research Assistant, SciWhyLab, SC&IS, JNU, New Delhi, India.
 ankeshpandey67@gmail.com
 
-**Principal Investigator: Prof. Shandar Ahmad**
-School of Computational & Integrative Sciences, JNU
+**Principal Investigator: Shandar Ahmad**
+Professor, School of Computational & Integrative Sciences, JNU, New Delhi, India.
 shandar@jnu.ac.in
 
 ---
